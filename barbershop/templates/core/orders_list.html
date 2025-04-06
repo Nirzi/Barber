@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список заказов</title>
+    <style>
+        body {
+            font-family: Georgia, serif;
+            background-color: #fffdf5;
+            padding: 30px;
+        }
+        h1 {
+            color: #5d4037;
+            text-align: center;
+        }
+        .order {
+            background: #ffffff;
+            margin: 15px auto;
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 600px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        a {
+            color: #3f51b5;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Список заказов</h1>
+    {% for order in orders %}
+        <div class="order">
+            <strong>Клиент:</strong> {{ order.client_name }}<br>
+            <strong>Дата:</strong> {{ order.date }}<br>
+            <strong>Статус:</strong> {{ order.status }}<br>
+            <a href="/orders/{{ order.id }}/">Подробнее</a>
+        </div>
+    {% endfor %}
+    <a class="back" href="/">← Вернуться на главную</a>
+</body>
+</html>
