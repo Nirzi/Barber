@@ -1,10 +1,12 @@
 from django.shortcuts import render, get_object_or_404
-from core.models import Master, Service, Order
+from core.models import Master, Service, Order, Review
+
 
 def landing(request):
     masters = Master.objects.filter(is_active=True)
     services = Service.objects.all()
-    context = {"masters": masters, "services": services}
+    reviews = Review.objects.filter(is_published=True)
+    context = {"masters": masters, "services": services, "reviews": reviews}
     return render(request, "core/landing.html", context)
 
 def thanks(request):
