@@ -1,41 +1,10 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Детали заказа</title>
-    <style>
-        body {
-            font-family: Georgia, serif;
-            background-color: #fefae0;
-            padding: 30px;
-        }
-        .detail {
-            background: #fff;
-            padding: 20px;
-            max-width: 600px;
-            margin: auto;
-            border-radius: 10px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #6d4c41;
-            text-align: center;
-        }
-        ul {
-            padding-left: 20px;
-        }
-        .back {
-            display: block;
-            text-align: center;
-            margin-top: 25px;
-            color: #333;
-        }
-    </style>
-</head>
-<body>
-    <h1>Детали заказа</h1>
-    <div class="detail">
-        <p><strong>Клиент:</strong> {{ order.client_name }}</p>
+{% extends "base.html" %}
+{% block title %}Детали заявки{% endblock %}
+
+{% block content %}
+<div class="card my-4">
+    <div class="card-body">
+        <h3>{{ order.client_name }}</h3>
         <p><strong>Дата:</strong> {{ order.date }}</p>
         <p><strong>Статус:</strong> {{ order.status }}</p>
         <p><strong>Услуги:</strong></p>
@@ -44,7 +13,7 @@
                 <li>{{ service }}</li>
             {% endfor %}
         </ul>
+        <a href="{% url 'orders_list' %}" class="btn btn-secondary mt-3">Вернуться к списку</a>
     </div>
-    <a class="back" href="/">← Вернуться на главную</a>
-</body>
-</html>
+</div>
+{% endblock %}

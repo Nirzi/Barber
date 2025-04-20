@@ -1,34 +1,10 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Спасибо</title>
-    <style>
-        body {
-            font-family: 'Georgia', serif;
-            background-color: #f0fff0;
-            text-align: center;
-            padding: 50px;
-        }
-        h1 {
-            color: #4caf50;
-        }
-        a {
-            margin-top: 20px;
-            display: inline-block;
-            padding: 10px 20px;
-            background: #4caf50;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-        }
-        a:hover {
-            background: #45a049;
-        }
-    </style>
-</head>
-<body>
-    <h1>Спасибо за ваш визит!</h1>
-    <a href="/">На главную</a>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Спасибо за заявку{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <h2>Спасибо за вашу заявку!</h2>
+    <p>Мы скоро свяжемся с вами!</p>
+    <a href="{% url 'landing' %}" class="btn btn-primary mt-3">На главную</a>
+</div>
+{% endblock %}
