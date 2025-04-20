@@ -1,0 +1,12 @@
+<div class="card mb-3">
+  <div class="card-body">
+      <h5 class="card-title">{{ order.client_name }}</h5>
+      <p class="card-text"><strong>Дата:</strong> {{ order.date }}</p>
+      <p class="card-text"><strong>Услуги:</strong> {{ order.services|join:", " }}</p>
+      <p class="card-text"><strong>Мастер:</strong> {{ order.master_name }}</p>
+      <span class="badge {% if order.status == 'новая' %}bg-warning{% elif order.status == 'подтверждённая' %}bg-primary{% else %}bg-secondary{% endif %}">
+          {{ order.status|title }}
+      </span>
+      <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-outline-secondary mt-2">Подробнее</a>
+  </div>
+</div>
