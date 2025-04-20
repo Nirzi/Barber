@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block title %}Детали заявки{% endblock %}
 
 {% block content %}
@@ -8,12 +9,20 @@
         <p><strong>Дата записи:</strong> {{ order.appointment_date }}</p>
         <p><strong>Телефон:</strong> {{ order.phone }}</p>
         <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
-        <p><strong>Мастер:</strong> {{ order.master.name if order.master else 'Не назначен' }}</p>
+        <p><strong>Мастер:</strong>
+            {% if order.master %}
+                {{ order.master.name }}
+            {% else %}
+                Не назначен
+            {% endif %}
+        </p>
         <p><strong>Комментарий:</strong> {{ order.comment|default:"Нет комментария" }}</p>
         <p><strong>Услуги:</strong></p>
         <ul>
             {% for service in order.services.all %}
                 <li>{{ service.name }}</li>
+            {% empty %}
+                <li>Нет услуг</li>
             {% endfor %}
         </ul>
         <a href="{% url 'orders_list' %}" class="btn btn-secondary">Вернуться к списку</a>
