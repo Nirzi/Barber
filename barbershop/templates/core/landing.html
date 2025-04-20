@@ -2,31 +2,41 @@
 {% block title %}Главная — Барбершоп{% endblock %}
 
 {% block content %}
-<section id="about" class="my-5">
-    <h2>О нас</h2>
-    <p>Добро пожаловать в барбершоп «Стальная Борода»!</p>
-</section>
 
-<section id="services" class="my-5">
-    <h2>Наши услуги</h2>
-    <ul>
-        {% for service in services %}
-            <li>{{ service.name }} — {{ service.price }} ₽ ({{ service.duration }} мин)</li>
-        {% endfor %}
-    </ul>
-</section>
+<div class="container mt-4">
 
-<section id="masters" class="my-5">
-    <h2>Наши мастера</h2>
-    <ul>
-        {% for master in masters %}
-            <li>{{ master.name }} (Стаж: {{ master.experience }} лет)</li>
-        {% endfor %}
-    </ul>
-</section>
+  <h2 class="mb-3">Наши мастера</h2>
+  <div class="row">
+    {% for master in masters %}
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        {% if master.photo %}
+          <img src="{{ master.photo.url }}" class="card-img-top" alt="{{ master.name }}">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ master.name }}</h5>
+          <p class="card-text">Стаж: {{ master.experience }} лет</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 
-<section id="appointment" class="my-5">
-    <h2>Запись на услугу</h2>
-    <a href="{% url 'thanks' %}" class="btn btn-success">Отправить заявку</a>
-</section>
+  <h2 class="mt-5 mb-3">Отзывы клиентов</h2>
+  <div class="row">
+    {% for review in reviews %}
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ review.client_name }}</h5>
+          <p class="card-text">{{ review.text }}</p>
+          <p class="card-text"><small>Оценка: {{ review.rating }}/5</small></p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+
 {% endblock %}
