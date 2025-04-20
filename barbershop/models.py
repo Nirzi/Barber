@@ -39,3 +39,21 @@ class Master(models.Model):
     class Meta:
         verbose_name = "Мастер"
         verbose_name_plural = "Мастера"
+        
+class Order(models.Model):
+    client_name = models.CharField(max_length=100, verbose_name="Имя клиента")
+    phone = models.CharField(max_length=20, verbose_name="Телефон")
+    comment = models.TextField(blank=True, verbose_name="Комментарий")
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="new", verbose_name="Статус")
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    date_updated = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
+    master = models.ForeignKey(Master, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Мастер")
+    services = models.ManyToManyField(Service, related_name="orders", verbose_name="Услуги")
+    appointment_date = models.DateTimeField(verbose_name="Дата и время записи")
+
+    def __str__(self):
+        return f"Заказ от {self.client_name} на {self.appointment_date}"
+
+    class Meta:
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
