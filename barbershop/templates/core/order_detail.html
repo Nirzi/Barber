@@ -5,15 +5,18 @@
 <div class="card my-4">
     <div class="card-body">
         <h3>{{ order.client_name }}</h3>
-        <p><strong>Дата:</strong> {{ order.date }}</p>
-        <p><strong>Статус:</strong> {{ order.status }}</p>
+        <p><strong>Дата записи:</strong> {{ order.appointment_date }}</p>
+        <p><strong>Телефон:</strong> {{ order.phone }}</p>
+        <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
+        <p><strong>Мастер:</strong> {{ order.master.name if order.master else 'Не назначен' }}</p>
+        <p><strong>Комментарий:</strong> {{ order.comment|default:"Нет комментария" }}</p>
         <p><strong>Услуги:</strong></p>
         <ul>
-            {% for service in order.services %}
-                <li>{{ service }}</li>
+            {% for service in order.services.all %}
+                <li>{{ service.name }}</li>
             {% endfor %}
         </ul>
-        <a href="{% url 'orders_list' %}" class="btn btn-secondary mt-3">Вернуться к списку</a>
+        <a href="{% url 'orders_list' %}" class="btn btn-secondary">Вернуться к списку</a>
     </div>
 </div>
 {% endblock %}

@@ -11,7 +11,7 @@
     <h2>Наши услуги</h2>
     <ul>
         {% for service in services %}
-            <li>{{ service }}</li>
+            <li>{{ service.name }} — {{ service.price }} ₽ ({{ service.duration }} мин)</li>
         {% endfor %}
     </ul>
 </section>
@@ -20,7 +20,7 @@
     <h2>Наши мастера</h2>
     <ul>
         {% for master in masters %}
-            <li>{{ master.name }}</li>
+            <li>{{ master.name }} (Стаж: {{ master.experience }} лет)</li>
         {% endfor %}
     </ul>
 </section>
