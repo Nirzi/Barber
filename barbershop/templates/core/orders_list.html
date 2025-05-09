@@ -4,6 +4,28 @@
 {% block content %}
 <h2 class="text-center my-4">Список заявок</h2>
 
+<!-- Поисковая форма -->
+<form method="get" class="mb-4">
+  <div class="row g-2 align-items-center">
+    <div class="col-md-4">
+      {{ form.query.label_tag }} {{ form.query }}
+    </div>
+    <div class="col-auto">
+      {{ form.by_name }} {{ form.by_name.label_tag }}
+    </div>
+    <div class="col-auto">
+      {{ form.by_phone }} {{ form.by_phone.label_tag }}
+    </div>
+    <div class="col-auto">
+      {{ form.by_comment }} {{ form.by_comment.label_tag }}
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary">Поиск</button>
+    </div>
+  </div>
+</form>
+
+<!-- Список заявок -->
 {% for order in orders %}
 <div class="card mb-3">
     <div class="card-body">

@@ -1,41 +1,62 @@
 {% extends "base.html" %}
 {% block title %}Главная — Барбершоп{% endblock %}
-
 {% block content %}
 
 <div class="container mt-4">
 
-  <h2 class="mb-3">Наши мастера</h2>
-  <div class="row">
-    {% for master in masters %}
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        {% if master.photo %}
-          <img src="{{ master.photo.url }}" class="card-img-top" alt="{{ master.name }}">
-        {% endif %}
-        <div class="card-body">
-          <h5 class="card-title">{{ master.name }}</h5>
-          <p class="card-text">Стаж: {{ master.experience }} лет</p>
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
+  <!-- О нас -->
+  <section id="about" class="mb-5">
+    <h2>О нас</h2>
+    <p>Добро пожаловать в барбершоп «Стальная Борода» — место, где мужской стиль превращается в искусство.</p>
+  </section>
 
-  <h2 class="mt-5 mb-3">Отзывы клиентов</h2>
-  <div class="row">
-    {% for review in reviews %}
-    <div class="col-md-6 mb-4">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{ review.client_name }}</h5>
-          <p class="card-text">{{ review.text }}</p>
-          <p class="card-text"><small>Оценка: {{ review.rating }}/5</small></p>
+  <!-- Мастера -->
+  <section id="masters">
+    <h2 class="mb-3">Наши мастера</h2>
+    <div class="row">
+      {% for master in masters %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          {% if master.photo %}
+          <img
+            src="{{ master.photo.url }}"
+            class="card-img-top"
+            alt="{{ master.name }}"
+          />
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ master.name }}</h5>
+            <p class="card-text">Стаж: {{ master.experience }} лет</p>
+          </div>
         </div>
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
+  </section>
+
+  <!-- Услуги -->
+  <section id="services" class="mt-5">
+    <h2 class="mb-3">Услуги</h2>
+    <p>Полный список услуг доступен при записи. Мы предоставляем стрижки, бритьё, уход и многое другое.</p>
+  </section>
+
+  <!-- Отзывы -->
+  <section class="mt-5">
+    <h2 class="mb-3">Отзывы клиентов</h2>
+    <div class="row">
+      {% for review in reviews %}
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ review.client_name }}</h5>
+            <p class="card-text">{{ review.text }}</p>
+            <p class="card-text"><small>Оценка: {{ review.rating }}/5</small></p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
 
 </div>
 
