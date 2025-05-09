@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django import forms
 
 STATUS_CHOICES = [
     ('new', 'Новая'),
@@ -78,3 +79,21 @@ class Review(models.Model):
     class Meta:
         verbose_name = "Отзыв"
         verbose_name_plural = "Отзывы"
+        
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['client_name', 'text', 'rating', 'master', 'photo']
+        widgets = {
+            'client_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'text': forms.Textarea(attrs={'class': 'form-control'}),
+            'master': forms.Select(attrs={'class': 'form-select'}),
+            'photo': forms.FileInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'client_name': 'Имя клиента',
+            'text': 'Отзыв',
+            'rating': 'Оценка',
+            'master': 'Мастер',
+            'photo': 'Фото',
+        }
