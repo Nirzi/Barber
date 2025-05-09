@@ -3,61 +3,80 @@
 {% block content %}
 
 <div class="container mt-4">
+  <h2 class="mb-3">Наши мастера</h2>
+  <div class="row">
+    {% for master in masters %}
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        {% if master.photo %}
+        <img src="{{ master.photo.url }}" class="card-img-top" alt="{{ master.name }}">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ master.name }}</h5>
+          <p class="card-text">Стаж: {{ master.experience }} лет</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 
-  <!-- О нас -->
-  <section id="about" class="mb-5">
-    <h2>О нас</h2>
-    <p>Добро пожаловать в барбершоп «Стальная Борода» — место, где мужской стиль превращается в искусство.</p>
-  </section>
+  <h2 class="mt-5 mb-3">Отзывы клиентов</h2>
+  <div class="row">
+    {% for review in reviews %}
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ review.client_name }}</h5>
+          <p class="card-text">{{ review.text }}</p>
+          <p class="card-text"><small>Оценка: {{ review.rating }}/5</small></p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 
-  <!-- Мастера -->
-  <section id="masters">
-    <h2 class="mb-3">Наши мастера</h2>
-    <div class="row">
-      {% for master in masters %}
-      <div class="col-md-4 mb-4">
-        <div class="card h-100">
-          {% if master.photo %}
-          <img
-            src="{{ master.photo.url }}"
-            class="card-img-top"
-            alt="{{ master.name }}"
-          />
-          {% endif %}
-          <div class="card-body">
-            <h5 class="card-title">{{ master.name }}</h5>
-            <p class="card-text">Стаж: {{ master.experience }} лет</p>
+  <h2 id="services" class="mt-5 mb-3">Услуги</h2>
+  <div class="row">
+    {% for service in services %}
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        {% if service.image %}
+        <img src="{{ service.image.url }}" class="card-img-top" alt="{{ service.name }}">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ service.name }}</h5>
+          <p class="card-text">Цена: {{ service.price }}₽</p>
+          <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#serviceModal{{ service.id }}">
+            Подробнее
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Модальное окно -->
+    <div class="modal fade" id="serviceModal{{ service.id }}" tabindex="-1" aria-labelledby="modalLabel{{ service.id }}" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel{{ service.id }}">{{ service.name }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+          </div>
+          <div class="modal-body">
+            <p><strong>Описание:</strong> {{ service.description|default:"Без описания" }}</p>
+            <p><strong>Длительность:</strong> {{ service.duration }} мин.</p>
+            <p><strong>Цена:</strong> {{ service.price }} ₽</p>
+            {% if service.is_popular %}
+              <span class="badge bg-warning text-dark">Популярная услуга</span>
+            {% endif %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
           </div>
         </div>
       </div>
-      {% endfor %}
     </div>
-  </section>
-
-  <!-- Услуги -->
-  <section id="services" class="mt-5">
-    <h2 class="mb-3">Услуги</h2>
-    <p>Полный список услуг доступен при записи. Мы предоставляем стрижки, бритьё, уход и многое другое.</p>
-  </section>
-
-  <!-- Отзывы -->
-  <section class="mt-5">
-    <h2 class="mb-3">Отзывы клиентов</h2>
-    <div class="row">
-      {% for review in reviews %}
-      <div class="col-md-6 mb-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">{{ review.client_name }}</h5>
-            <p class="card-text">{{ review.text }}</p>
-            <p class="card-text"><small>Оценка: {{ review.rating }}/5</small></p>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </section>
-
+    {% endfor %}
+  </div>
 </div>
 
 {% endblock %}

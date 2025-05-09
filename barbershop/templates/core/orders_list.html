@@ -4,6 +4,33 @@
 {% block content %}
 <h2 class="text-center my-4">Список заявок</h2>
 
+<!-- Форма добавления заявки -->
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Оставить заявку</h5>
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="client_name" class="form-label">Имя</label>
+        <input type="text" name="client_name" id="client_name" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="phone" class="form-label">Телефон</label>
+        <input type="text" name="phone" id="phone" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="appointment_date" class="form-label">Дата и время</label>
+        <input type="datetime-local" name="appointment_date" id="appointment_date" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="comment" class="form-label">Комментарий</label>
+        <textarea name="comment" id="comment" class="form-control"></textarea>
+      </div>
+      <button type="submit" class="btn btn-success">Записаться</button>
+    </form>
+  </div>
+</div>
+
 <!-- Поисковая форма -->
 <form method="get" class="mb-4">
   <div class="row g-2 align-items-center">
@@ -25,33 +52,52 @@
   </div>
 </form>
 
-<!-- Список заявок -->
-{% for order in orders %}
+<!-- Последние 3 записи -->
+<h4 class="mt-5">Ближайшие записи:</h4>
+{% for order in latest_orders %}
+<div class="card mb-3 border-success">
+  <div class="card-body">
+    <h5 class="card-title">{{ order.client_name }}</h5>
+    <p><strong>Дата записи:</strong> {{ order.appointment_date }}</p>
+    <p><strong>Комментарий:</strong> {{ order.comment|default:"-" }}</p>
+  </div>
+</div>
+{% empty %}
+<p>Ближайших записей нет.</p>
+{% endfor %}
+
+<!-- Все заявки (только 3) -->
+<h4 class="mt-5">Некоторые из всех заявок:</h4>
+{% for order in orders|slice:":3" %}
 <div class="card mb-3">
-    <div class="card-body">
-        <h5>{{ order.client_name }}</h5>
-        <p><strong>Дата записи:</strong> {{ order.appointment_date }}</p>
-        <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
-        <p><strong>Мастер:</strong>
-            {% if order.master %}
-                {{ order.master.name }}
-            {% else %}
-                Не назначен
-            {% endif %}
-        </p>
-        <p><strong>Услуги:</strong>
-            {% for service in order.services.all %}
-                {{ service.name }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-        </p>
-        <a href="{% url 'order_detail' order.id %}" class="btn btn-outline-secondary btn-sm">Подробнее</a>
-    </div>
+  <div class="card-body">
+    <h5>{{ order.client_name }}</h5>
+    <p><strong>Дата записи:</strong> {{ order.appointment_date }}</p>
+    <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
+    <p><strong>Мастер:</strong>
+        {% if order.master %}
+            {{ order.master.name }}
+        {% else %}
+            Не назначен
+        {% endif %}
+    </p>
+    <p><strong>Услуги:</strong>
+        {% for service in order.services.all %}
+            {{ service.name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+    </p>
+    <a href="{% url 'order_detail' order.id %}" class="btn btn-outline-secondary btn-sm">Подробнее</a>
+  </div>
 </div>
 {% empty %}
 <p class="text-center">Заявок пока нет.</p>
 {% endfor %}
 
+<p class="text-muted text-center">
+  Показаны только некоторые заявки. Остальные доступны через поиск или в админке.
+</p>
+
 <div class="text-center">
-    <a href="{% url 'landing' %}" class="btn btn-secondary">На главную</a>
+  <a href="{% url 'landing' %}" class="btn btn-secondary">На главную</a>
 </div>
 {% endblock %}

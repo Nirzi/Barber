@@ -9,9 +9,9 @@ STATUS_CHOICES = [
 ]
 
 class Service(models.Model):
-    name = models.CharField(max_length=200, verbose_name="Название")
+    name = models.CharField(max_length=200, verbose_name="Название", db_index=True)
     description = models.TextField(blank=True, verbose_name="Описание")
-    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена")
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена", db_index=True)
     duration = models.PositiveIntegerField(verbose_name="Длительность (минут)")
     is_popular = models.BooleanField(default=False, verbose_name="Популярная услуга")
     image = models.ImageField(upload_to="services/", blank=True, verbose_name="Изображение")
@@ -22,6 +22,9 @@ class Service(models.Model):
     class Meta:
         verbose_name = "Услуга"
         verbose_name_plural = "Услуги"
+        indexes = [
+            models.Index(fields=["name", "price"]),  # составной индекс
+        ]
 
 
 class Master(models.Model):
