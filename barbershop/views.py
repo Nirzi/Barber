@@ -8,6 +8,8 @@ from django.shortcuts import redirect
 from django.utils.timezone import now
 from django.http import JsonResponse
 from core.forms import ReviewForm
+from django.core.paginator import Paginator
+
 
 
 
@@ -16,12 +18,20 @@ from core.forms import ReviewForm
 def landing(request):
     masters = Master.objects.filter(is_active=True)
     services = Service.objects.all()
-    reviews = Review.objects.filter(is_published=True)
+
+    rating = request.GET.get("rating")
+    reviews_qs = Review.objects.filter(is_published=True).order_by("-created_at")
+    if rating:
+        reviews_qs = reviews_qs.filter(rating=rating)
+
+    paginator = Paginator(reviews_qs, 3)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
 
     context = {
         "masters": masters,
         "services": services,
-        "reviews": reviews,
+        "page_obj": page_obj,  # <- это обязательно
     }
     return render(request, "core/landing.html", context)
 
@@ -99,12 +109,13 @@ def create_review(request):
         form = ReviewForm(request.POST, request.FILES)
         if form.is_valid():
             review = form.save(commit=False)
-            review.is_published = False
+            review.is_published = True
             review.save()
             return redirect('thanks')
     else:
         form = ReviewForm()
     return render(request, 'core/review_form.html', {'form': form})
+
 
 
 def get_master_info(request):

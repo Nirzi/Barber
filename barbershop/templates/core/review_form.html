@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load static %}
 {% block title %}Оставить отзыв{% endblock %}
 
 {% block content %}
@@ -45,5 +44,100 @@
     <button type="submit" class="btn btn-primary">Отправить отзыв</button>
   </form>
 </div>
-<script src="{% static 'js/reviews.js' %}"></script>
+
+<script>
+// Звёздочный рейтинг
+document.querySelectorAll('.star-rating i').forEach(star => {
+  star.addEventListener('click', function () {
+    const rating = this.getAttribute('data-rating');
+    document.getElementById('rating').value = rating;
+    updateStars(rating);
+  });
+});
+
+function updateStars(rating) {
+  document.querySelectorAll('.star-rating i').forEach(star => {
+    const starValue = star.getAttribute('data-rating');
+    star.classList.toggle('bi-star-fill', starValue <= rating);
+    star.classList.toggle('bi-star', starValue > rating);
+  });
+}
+
+// AJAX: загрузка данных о мастере
+document.getElementById('id_master').addEventListener('change', function () {
+  const masterId = this.value;
+  if (!masterId) return;
+
+  fetch(`/api/master-info/?master_id=${masterId}`, {
+    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) displayMasterInfo(data.master);
+    });
+});
+
+function displayMasterInfo(master) {
+  const infoDiv = document.getElementById('master-info');
+  infoDiv.innerHTML = '';
+
+  const card = document.createElement('div');
+  card.className = 'card mt-3';
+
+  if (master.photo) {
+    const img = document.createElement('img');
+    img.src = master.photo;
+    img.className = 'card-img-top';
+    img.alt = master.name;
+    card.appendChild(img);
+  }
+
+  const body = document.createElement('div');
+  body.className = 'card-body';
+
+  const name = document.createElement('h5');
+  name.textContent = master.name;
+  name.className = 'card-title';
+
+  const exp = document.createElement('p');
+  exp.textContent = `Опыт: ${master.experience} лет`;
+
+  body.appendChild(name);
+  body.appendChild(exp);
+  card.appendChild(body);
+  infoDiv.appendChild(card);
+}
+
+// Валидация
+document.getElementById('review-form').addEventListener('submit', function (e) {
+  const name = document.getElementById('id_client_name');
+  const text = document.getElementById('id_text');
+  const rating = document.getElementById('rating');
+  const master = document.getElementById('id_master');
+  let valid = true;
+
+  function showError(el, msg) {
+    clearError(el);
+    const error = document.createElement('div');
+    error.className = 'invalid-feedback d-block';
+    error.textContent = msg;
+    el.classList.add('is-invalid');
+    el.parentNode.appendChild(error);
+  }
+
+  function clearError(el) {
+    el.classList.remove('is-invalid');
+    const err = el.parentNode.querySelector('.invalid-feedback');
+    if (err) err.remove();
+  }
+
+  if (!name.value.trim()) { showError(name, 'Укажите имя'); valid = false; } else clearError(name);
+  if (!text.value.trim()) { showError(text, 'Напишите отзыв'); valid = false; } else clearError(text);
+  if (!rating.value) { showError(document.querySelector('.star-rating'), 'Выберите оценку'); valid = false; }
+  else clearError(document.querySelector('.star-rating'));
+  if (!master.value) { showError(master, 'Выберите мастера'); valid = false; } else clearError(master);
+
+  if (!valid) e.preventDefault();
+});
+</script>
 {% endblock %}
