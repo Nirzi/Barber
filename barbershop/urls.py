@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+from .views import create_review, get_master_info
 
 
 
@@ -28,4 +29,6 @@ urlpatterns = [
     path('orders/<int:order_id>/', views.order_detail, name='order_detail'),
     path('accounts/', include('django.contrib.auth.urls')),
     path("services/create/", views.service_create, name="service_create"),
+    path('reviews/create/', create_review, name='create_review'),
+    path('api/master-info/', get_master_info, name='get_master_info'),
 ]

@@ -6,6 +6,10 @@ from django.shortcuts import render
 from django import forms
 from django.shortcuts import redirect
 from django.utils.timezone import now
+from django.http import JsonResponse
+from core.forms import ReviewForm
+
+
 
 
 
@@ -89,4 +93,34 @@ def service_create(request):
     else:
         form = ServiceForm()
     return render(request, "core/service_create.html", {"form": form})
+  
+def create_review(request):
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, request.FILES)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.is_published = False
+            review.save()
+            return redirect('thanks')
+    else:
+        form = ReviewForm()
+    return render(request, 'core/review_form.html', {'form': form})
+
+
+def get_master_info(request):
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        master_id = request.GET.get('master_id')
+        try:
+            master = Master.objects.get(id=master_id)
+            data = {
+                'id': master.id,
+                'name': master.name,
+                'experience': master.experience,
+                'photo': master.photo.url if master.photo else None,
+                'services': list(master.services.values('id', 'name', 'price')),
+            }
+            return JsonResponse({'success': True, 'master': data})
+        except Master.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Мастер не найден'})
+    return JsonResponse({'success': False, 'error': 'Некорректный запрос'})
 
