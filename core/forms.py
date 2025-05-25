@@ -1,5 +1,5 @@
 from django import forms
-from .models import Review, Master
+from .models import Review, Master, Order
 
 
 class OrderSearchForm(forms.Form):
@@ -28,3 +28,15 @@ class ReviewForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['master'].queryset = Master.objects.filter(is_active=True)
+        
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['client_name', 'phone', 'appointment_date', 'comment', 'services']
+        widgets = {
+            'client_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'appointment_date': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+            'comment': forms.Textarea(attrs={'class': 'form-control'}),
+            'services': forms.CheckboxSelectMultiple()
+        }

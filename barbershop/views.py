@@ -9,6 +9,8 @@ from django.utils.timezone import now
 from django.http import JsonResponse
 from core.forms import ReviewForm
 from django.core.paginator import Paginator
+from datetime import datetime
+
 
 
 def landing(request):
@@ -58,8 +60,13 @@ def orders_list(request):
     if request.method == "POST":
         client_name = request.POST.get("client_name")
         phone = request.POST.get("phone")
-        appointment_date = request.POST.get("appointment_date")
+        appointment_date = request.POST.get("appointment_date")  # строка типа '2025-06-29T11:11'
         comment = request.POST.get("comment")
+
+        try:
+            appointment_date = datetime.strptime(appointment_date, "%Y-%m-%dT%H:%M")
+        except (ValueError, TypeError):
+            appointment_date = None
 
         if client_name and phone and appointment_date:
             Order.objects.create(
