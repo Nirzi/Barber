@@ -11,10 +11,6 @@ from core.forms import ReviewForm
 from django.core.paginator import Paginator
 
 
-
-
-
-
 def landing(request):
     masters = Master.objects.filter(is_active=True)
     services = Service.objects.all()
@@ -45,17 +41,19 @@ def orders_list(request):
     filters = Q()
 
     if form.is_valid():
-        query = form.cleaned_data.get('query')
+        query = form.cleaned_data.get("query")
         if query:
-            if form.cleaned_data.get('by_name'):
+            if form.cleaned_data.get("by_name"):
                 filters |= Q(client_name__icontains=query)
-            if form.cleaned_data.get('by_phone'):
+            if form.cleaned_data.get("by_phone"):
                 filters |= Q(phone__icontains=query)
-            if form.cleaned_data.get('by_comment'):
+            if form.cleaned_data.get("by_comment"):
                 filters |= Q(comment__icontains=query)
 
     orders = Order.objects.filter(filters).order_by("-date_created")
-    latest_orders = Order.objects.filter(appointment_date__gte=now()).order_by("appointment_date")[:3]
+    latest_orders = Order.objects.filter(appointment_date__gte=now()).order_by(
+        "appointment_date"
+    )[:3]
 
     if request.method == "POST":
         client_name = request.POST.get("client_name")
@@ -68,7 +66,7 @@ def orders_list(request):
                 client_name=client_name,
                 phone=phone,
                 appointment_date=appointment_date,
-                comment=comment
+                comment=comment,
             )
             return redirect("orders_list")
 
@@ -99,39 +97,45 @@ def service_create(request):
             form.save()
             return redirect("landing")
         else:
-            return render(request, "core/service_create.html", {"form": form, "error_message": "Пожалуйста, исправьте ошибки в форме."})
+            return render(
+                request,
+                "core/service_create.html",
+                {
+                    "form": form,
+                    "error_message": "Пожалуйста, исправьте ошибки в форме.",
+                },
+            )
     else:
         form = ServiceForm()
     return render(request, "core/service_create.html", {"form": form})
-  
+
+
 def create_review(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = ReviewForm(request.POST, request.FILES)
         if form.is_valid():
             review = form.save(commit=False)
             review.is_published = True
             review.save()
-            return redirect('thanks')
+            return redirect("thanks")
     else:
         form = ReviewForm()
-    return render(request, 'core/review_form.html', {'form': form})
-
+    return render(request, "core/review_form.html", {"form": form})
 
 
 def get_master_info(request):
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        master_id = request.GET.get('master_id')
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        master_id = request.GET.get("master_id")
         try:
             master = Master.objects.get(id=master_id)
             data = {
-                'id': master.id,
-                'name': master.name,
-                'experience': master.experience,
-                'photo': master.photo.url if master.photo else None,
-                'services': list(master.services.values('id', 'name', 'price')),
+                "id": master.id,
+                "name": master.name,
+                "experience": master.experience,
+                "photo": master.photo.url if master.photo else None,
+                "services": list(master.services.values("id", "name", "price")),
             }
-            return JsonResponse({'success': True, 'master': data})
+            return JsonResponse({"success": True, "master": data})
         except Master.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Мастер не найден'})
-    return JsonResponse({'success': False, 'error': 'Некорректный запрос'})
-
+            return JsonResponse({"success": False, "error": "Мастер не найден"})
+    return JsonResponse({"success": False, "error": "Некорректный запрос"})
