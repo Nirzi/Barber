@@ -156,10 +156,13 @@ class ServiceCreateView(StaffRequiredMixin, CreateView):
     model = Service
     form_class = ServiceForm
     template_name = "core/service_create.html"
-    success_url = reverse_lazy("services_list")
+    # перенаправляем на главную
+    success_url = reverse_lazy("landing")
+
     def form_valid(self, form):
         messages.success(self.request, "Услуга успешно создана.")
         return super().form_valid(form)
+
     def form_invalid(self, form):
         messages.error(self.request, "Исправьте ошибки.")
         return super().form_invalid(form)
