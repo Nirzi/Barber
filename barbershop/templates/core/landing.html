@@ -1,33 +1,51 @@
+{# templates/core/landing.html #}
 {% extends "base.html" %}
 {% block title %}Главная — Барбершоп{% endblock %}
+
 {% block content %}
+  {# Секция «О нас» #}
+  <section id="about" class="container mt-4">
+    <h2 class="mb-3">О нас</h2>
+    <p>
+      Добро пожаловать в барбершоп «Стальная Борода» — место, где каждая стрижка
+      становится произведением искусства. Наши мастера с многолетним опытом
+      используют лучшие инструменты и премиальные средства, чтобы подчеркнуть
+      вашу индивидуальность.
+    </p>
+  </section>
 
-<div class="container mt-4">
-  <h2 class="mb-3">Наши мастера</h2>
-  <div class="row">
-    {% for master in masters %}
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        {% if master.photo %}
-        <img src="{{ master.photo.url }}" class="card-img-top" alt="{{ master.name }}">
-        {% endif %}
-        <div class="card-body">
-          <h5 class="card-title">{{ master.name }}</h5>
-          <p class="card-text">Стаж: {{ master.experience }} лет</p>
+  {# Секция «Мастера» #}
+  <section id="masters" class="container mt-5">
+    <h2 class="mb-3">Наши мастера</h2>
+    <div class="row">
+      {% for master in masters %}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            {% if master.photo %}
+              <img
+                src="{{ master.photo.url }}"
+                class="card-img-top"
+                alt="{{ master.name }}"
+              >
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ master.name }}</h5>
+              <p class="card-text">Стаж: {{ master.experience }} лет</p>
+            </div>
+          </div>
         </div>
-      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
+  </section>
 
-  <h2 class="mt-5 mb-3">Отзывы клиентов</h2>
-  <div class="mb-3">
-    <a href="{% url 'create_review' %}" class="btn btn-primary">Оставить отзыв</a>
-  </div>
+  {# Секция «Отзывы клиентов» #}
+  <section id="reviews" class="container mt-5">
+    <h2 class="mb-3">Отзывы клиентов</h2>
+    <div class="mb-3">
+      <a href="{% url 'create_review' %}" class="btn btn-primary">Оставить отзыв</a>
+    </div>
 
-  <!-- Фильтры отзывов -->
-  <form method="get" class="mb-4">
-    <div class="row g-2 align-items-center">
+    <form method="get" class="mb-4 row g-2 align-items-center">
       <div class="col-auto">
         <select name="rating" class="form-select">
           <option value="">Все оценки</option>
@@ -41,86 +59,123 @@
       <div class="col-auto">
         <button type="submit" class="btn btn-outline-primary">Применить</button>
       </div>
-    </div>
-  </form>
+    </form>
 
-  <div class="row">
-    {% for review in page_obj %}
-    <div class="col-md-6 mb-4">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{ review.client_name }}</h5>
-          <p class="card-text">{{ review.text }}</p>
-          <p class="card-text"><small>Оценка: {{ review.rating }}/5</small></p>
+    <div class="row">
+      {% for review in page_obj %}
+        <div class="col-md-6 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ review.client_name }}</h5>
+              <p class="card-text">{{ review.text }}</p>
+              <p class="card-text"><small>Оценка: {{ review.rating }}/5</small></p>
+            </div>
+          </div>
         </div>
-      </div>
+      {% empty %}
+        <p class="text-muted">Нет отзывов с таким рейтингом.</p>
+      {% endfor %}
     </div>
-    {% empty %}
-    <p class="text-muted">Нет отзывов с таким рейтингом.</p>
-    {% endfor %}
-  </div>
 
-  <!-- Пагинация -->
-  <nav aria-label="Навигация по отзывам">
-    <ul class="pagination">
-      {% if page_obj.has_previous %}
-        <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}">Назад</a>
-        </li>
-      {% endif %}
-      <li class="page-item disabled">
-        <span class="page-link">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
-      </li>
-      {% if page_obj.has_next %}
-        <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}">Вперёд</a>
-        </li>
-      {% endif %}
-    </ul>
-  </nav>
-
-  <h2 id="services" class="mt-5 mb-3">Услуги</h2>
-  <div class="row">
-    {% for service in services %}
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        {% if service.image %}
-        <img src="{{ service.image.url }}" class="card-img-top" alt="{{ service.name }}">
+    <nav aria-label="Навигация по отзывам">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="?page={{ page_obj.previous_page_number }}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}"
+            >
+              Назад
+            </a>
+          </li>
         {% endif %}
-        <div class="card-body">
-          <h5 class="card-title">{{ service.name }}</h5>
-          <p class="card-text">Цена: {{ service.price }}₽</p>
-          <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#serviceModal{{ service.id }}">
-            Подробнее
-          </button>
-        </div>
-      </div>
-    </div>
+        <li class="page-item disabled">
+          <span class="page-link">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+          </span>
+        </li>
+        {% if page_obj.has_next %}
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="?page={{ page_obj.next_page_number }}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}"
+            >
+              Вперёд
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </section>
 
-    <!-- Модальное окно -->
-    <div class="modal fade" id="serviceModal{{ service.id }}" tabindex="-1" aria-labelledby="modalLabel{{ service.id }}" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalLabel{{ service.id }}">{{ service.name }}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-          </div>
-          <div class="modal-body">
-            <p><strong>Описание:</strong> {{ service.description|default:"Без описания" }}</p>
-            <p><strong>Длительность:</strong> {{ service.duration }} мин.</p>
-            <p><strong>Цена:</strong> {{ service.price }} ₽</p>
-            {% if service.is_popular %}
-              <span class="badge bg-warning text-dark">Популярная услуга</span>
+  {# Секция «Услуги» #}
+  <section id="services" class="container mt-5">
+    <h2 class="mb-3">Услуги</h2>
+    <div class="row">
+      {% for service in services %}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            {% if service.image %}
+              <img
+                src="{{ service.image.url }}"
+                class="card-img-top"
+                alt="{{ service.name }}"
+              >
             {% endif %}
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            <div class="card-body">
+              <h5 class="card-title">{{ service.name }}</h5>
+              <p class="card-text">Цена: {{ service.price }}₽</p>
+              <button
+                class="btn btn-outline-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#serviceModal{{ service.id }}"
+              >
+                Подробнее
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-</div>
 
+        {# Модальное окно #}
+        <div
+          class="modal fade"
+          id="serviceModal{{ service.id }}"
+          tabindex="-1"
+          aria-labelledby="modalLabel{{ service.id }}"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel{{ service.id }}">{{ service.name }}</h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Закрыть"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <p><strong>Описание:</strong> {{ service.description|default:"Без описания" }}</p>
+                <p><strong>Длительность:</strong> {{ service.duration }} мин.</p>
+                <p><strong>Цена:</strong> {{ service.price }} ₽</p>
+                {% if service.is_popular %}
+                  <span class="badge bg-warning text-dark">Популярная услуга</span>
+                {% endif %}
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Закрыть
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
 {% endblock %}

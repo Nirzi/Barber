@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* фон «за картой» */
+  body {
+    background: #f0f2f5;
+  }
+  /* карточка аутентификации */
+  .auth-card {
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: #fff;
+    max-width: 400px;
+    width: 100%;
+  }
+  .auth-card h3 {
+    font-weight: 600;
+    color: #343a40;
+  }
+  /* поля ввода */
+  .auth-card .form-control {
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: .25rem;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .auth-card .form-control:focus {
+    background: #fff;
+    border-color: #ffec99;
+    box-shadow: 0 0 0 .2rem rgba(255,236,153,.5);
+  }
+  /* кнопка */
+  .auth-card .btn-success {
+    background: #198754;
+    border: none;
+    transition: background .2s, transform .1s;
+  }
+  .auth-card .btn-success:hover {
+    background: #157347;
+    transform: translateY(-1px);
+  }
+  /* ссылка */
+  .auth-card .small a {
+    color: #0d6efd;
+    text-decoration: none;
+  }
+  .auth-card .small a:hover {
+    text-decoration: underline;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="card auth-card p-4">
+    <h3 class="mb-4 text-center">Регистрация</h3>
+    {% if form.errors %}
+      <div class="alert alert-danger">Пожалуйста, исправьте ошибки ниже.</div>
+    {% endif %}
+    <form method="post" class="needs-validation" novalidate>
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="id_username" class="form-label">Имя пользователя</label>
+        <input 
+          type="text" 
+          name="username" 
+          id="id_username" 
+          class="form-control" 
+          value="{{ form.username.value|default:'' }}"
+          required
+        >
+      </div>
+      <div class="mb-3">
+        <label for="id_password1" class="form-label">Пароль</label>
+        <input 
+          type="password" 
+          name="password1" 
+          id="id_password1" 
+          class="form-control" 
+          required
+        >
+      </div>
+      <div class="mb-3">
+        <label for="id_password2" class="form-label">Повторите пароль</label>
+        <input 
+          type="password" 
+          name="password2" 
+          id="id_password2" 
+          class="form-control" 
+          required
+        >
+      </div>
+      <button type="submit" class="btn btn-success w-100">Зарегистрироваться</button>
+    </form>
+    <div class="mt-3 text-center">
+      <small>Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></small>
+    </div>
+  </div>
+</div>
+{% endblock %}

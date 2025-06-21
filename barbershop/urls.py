@@ -1,34 +1,38 @@
-"""
-URL configuration for barbershop project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
-from . import views
-from .views import create_review, get_master_info
 
-
+from .views import (
+    LandingPageView, ThanksView,
+    OrdersListView, OrderCreateView, OrderDetailView,
+    MasterDetailView, ServicesListView,
+    ServiceCreateView, ServiceUpdateView,
+    ReviewCreateView, MastersServicesAjaxView,
+    MasterInfoAjaxView, SignUpView
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.landing, name='landing'),
-    path('thanks/', views.thanks, name='thanks'),
-    path('orders/', views.orders_list, name='orders_list'),
-    path('orders/<int:order_id>/', views.order_detail, name='order_detail'),
+    path('accounts/signup/', SignUpView.as_view(), name='signup'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path("services/create/", views.service_create, name="service_create"),
-    path('reviews/create/', create_review, name='create_review'),
-    path('api/master-info/', get_master_info, name='get_master_info'),
+    path('', LandingPageView.as_view(), name='landing'),
+    path('thanks/<str:source>/', ThanksView.as_view(), name='thanks'),
+
+    path('orders/', OrdersListView.as_view(), name='orders_list'),
+    path('orders/create/', OrderCreateView.as_view(), name='order_create'),
+    path('orders/<int:order_id>/', OrderDetailView.as_view(), name='order_detail'),
+
+    path('masters/<int:pk>/', MasterDetailView.as_view(), name='master_detail'),
+
+    path('services/', ServicesListView.as_view(), name='services_list'),
+    path('services/create/', ServiceCreateView.as_view(), name='service_create'),
+    path('services/<int:pk>/update/', ServiceUpdateView.as_view(), name='service_update'),
+
+    path('reviews/create/', ReviewCreateView.as_view(), name='create_review'),
+
+    path('api/master-services/', MastersServicesAjaxView.as_view(), name='get_master_services'),
+    path('api/master-info/', MasterInfoAjaxView.as_view(), name='get_master_info'),
+
+    # Регистрация + встроенные auth urls
+    path('accounts/signup/', SignUpView.as_view(), name='signup'),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

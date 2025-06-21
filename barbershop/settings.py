@@ -137,4 +137,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key')
 
+from django.urls import reverse_lazy
 
+
+LOGIN_URL = reverse_lazy('login')
+
+LOGIN_REDIRECT_URL = reverse_lazy('landing')
+
+LOGOUT_REDIRECT_URL = reverse_lazy('login')
