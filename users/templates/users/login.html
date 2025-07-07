@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card-header bg-dark text-white text-center py-4">
+                    <h3 class="fw-light my-0">Вход</h3>
+                </div>
+                <div class="card-body p-4">
+                    {% if form.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {{ error }}<br>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                {{ error }}<br>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <form method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ next }}">
+
+                        <div class="form-floating mb-3">
+                            {{ form.username }}
+                            <label for="id_username">Имя пользователя</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            {{ form.password }}
+                            <label for="id_password">Пароль</label>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" id="id_remember_me" type="checkbox" name="remember_me" value="true">
+                            <label class="form-check-label" for="id_remember_me">Запомнить меня</label>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">Войти</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center py-3">
+                    <div class="small">
+                        <p class="mb-0">Нет аккаунта? <a href="{% url 'register' %}" class="text-decoration-none">Зарегистрироваться</a></p> {# <-- THIS LINE IS CHANGED #}
+                        <p class="mb-0 mt-2"><a href="{% url 'password_reset' %}" class="text-decoration-none">Забыли пароль?</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,62 +1,68 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="{% url 'landing' %}">Барбершоп</a>
-    <button class="navbar-toggler" type="button"
-            data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm"> {# Added shadow-sm for subtle lift #}
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'landing' %}">Барбершоп Стальная Борода</a> {# Added fw-bold #}
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> {# Added ARIA attributes #}
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- Левая часть меню -->
-      <ul class="navbar-nav me-auto">
-        {% if user.is_staff %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'orders_list' %}">Запись</a>
-          </li>
-        {% endif %}
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0"> {# Added margin-bottom for small screens #}
+                {# Conditional items for staff #}
+                {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'orders_list' %}">Запись (Admin)</a> {# Clarified for admin #}
+                    </li>
+                {% endif %}
 
-        <li class="nav-item">
-          <a class="nav-link" href="#about">О нас</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#masters">Мастера</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#reviews">Отзывы</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#services">Услуги</a>
-        </li>
+                {# Main navigation links #}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'landing' %}#about">О нас</a> {# Link directly to landing then hash #}
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'landing' %}#masters">Мастера</a> {# Link directly to landing then hash #}
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'landing' %}#reviews">Отзывы</a> {# Link directly to landing then hash #}
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'services_list' %}">Услуги</a> {# Changed to a proper URL for a list page #}
+                </li>
 
-        {% if user.is_staff %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'service_create' %}">Добавить услугу</a>
-          </li>
-        {% endif %}
-        {# ...любыe другие пункты вашего меню#}
-      </ul>
+                {# Conditional items for staff #}
+                {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'service_create' %}">Добавить услугу (Admin)</a> {# Clarified for admin #}
+                    </li>
+                {% endif %}
+                {# ...любыe другие пункты вашего меню#}
+            </ul>
 
-      <!-- Правая часть меню -->
-      <ul class="navbar-nav ms-auto">
-        {% if user.is_authenticated %}
-          <li class="nav-item">
-            <span class="navbar-text me-3">Привет, {{ user.username }}!</span>
-          </li>
-          <li class="nav-item">
-            <form method="post" action="{% url 'logout' %}" class="d-inline">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-link nav-link p-0">Выйти</button>
-            </form>
-          </li>
-        {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Войти</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'signup' %}">Регистрация</a>
-          </li>
-        {% endif %}
-      </ul>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0"> {# Added margin-bottom for small screens #}
+                {% if user.is_authenticated %}
+                    {# Display username for authenticated users #}
+                    <li class="nav-item d-flex align-items-center me-3"> {# d-flex and align-items-center for vertical alignment #}
+                        <span class="navbar-text text-white-50">Привет, {{ user.username }}!</span>
+                    </li>
+                    {# Logout button #}
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-light">Выйти</button> {# Styled as a button #}
+                        </form>
+                    </li>
+                {% else %}
+                    {# Login link #}
+                    <li class="nav-item me-2"> {# Added margin to separate buttons #}
+                        <a class="btn btn-outline-light" href="{% url 'login' %}">Войти</a> {# Styled as a button #}
+                    </li>
+                    {# Registration link #}
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="{% url 'register' %}">Регистрация</a> {# <--- CHANGED FROM 'signup' TO 'register' #}
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>

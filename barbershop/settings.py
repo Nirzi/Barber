@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core.apps.CoreConfig',
     'django_extensions',
+    'users.apps.UsersConfig'
 ]
 
 MIDDLEWARE = [
@@ -139,9 +140,6 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key')
 
 from django.urls import reverse_lazy
 
-
 LOGIN_URL = reverse_lazy('login')
-
 LOGIN_REDIRECT_URL = reverse_lazy('landing')
-
 LOGOUT_REDIRECT_URL = reverse_lazy('login')
