@@ -4,7 +4,6 @@
 {% block content %}
 <h2 class="text-center my-4">Список заявок</h2>
 
-<!-- Форма добавления заявки -->
 <div class="card mb-4">
   <div class="card-body">
     <h5 class="card-title">Оставить заявку</h5>
@@ -31,7 +30,6 @@
   </div>
 </div>
 
-<!-- Поисковая форма -->
 <form method="get" class="mb-4">
   <div class="row g-2 align-items-center">
     <div class="col-md-4">
@@ -52,7 +50,6 @@
   </div>
 </form>
 
-<!-- Последние 3 записи -->
 <h4 class="mt-5">Ближайшие записи:</h4>
 {% for order in latest_orders %}
 <div class="card mb-3 border-success">
@@ -66,7 +63,6 @@
 <p>Ближайших записей нет.</p>
 {% endfor %}
 
-<!-- Все заявки (только 3) -->
 <h4 class="mt-5">Некоторые из всех заявок:</h4>
 {% for order in orders|slice:":3" %}
 <div class="card mb-3">

@@ -114,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 
@@ -143,3 +143,18 @@ from django.urls import reverse_lazy
 LOGIN_URL = reverse_lazy('login')
 LOGIN_REDIRECT_URL = reverse_lazy('landing')
 LOGOUT_REDIRECT_URL = reverse_lazy('login')
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'valyusha.panisheva@mail.ru'
+EMAIL_HOST_PASSWORD = 'bUO9wjOCRLQDmQyAepKJ'
+
+DEFAULT_FROM_EMAIL = 'valyusha.panisheva@mail.ru'
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

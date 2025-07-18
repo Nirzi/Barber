@@ -46,7 +46,6 @@
 </div>
 
 <script>
-// Звёздочный рейтинг
 document.querySelectorAll('.star-rating i').forEach(star => {
   star.addEventListener('click', function () {
     const rating = this.getAttribute('data-rating');
@@ -63,7 +62,6 @@ function updateStars(rating) {
   });
 }
 
-// AJAX: загрузка данных о мастере
 document.getElementById('id_master').addEventListener('change', function () {
   const masterId = this.value;
   if (!masterId) return;
@@ -108,7 +106,6 @@ function displayMasterInfo(master) {
   infoDiv.appendChild(card);
 }
 
-// Валидация
 document.getElementById('review-form').addEventListener('submit', function (e) {
   const name = document.getElementById('id_client_name');
   const text = document.getElementById('id_text');

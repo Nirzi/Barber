@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Профиль пользователя: {{ user_object.username }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card-header bg-dark text-white text-center py-4">
+                    <h3 class="fw-light my-0">Профиль пользователя: {{ user_object.username }}</h3>
+                </div>
+                <div class="card-body p-4">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="row mb-3">
+                        <div class="col-md-4 text-center">
+                            {% if profile.avatar %}
+                                <img src="{{ profile.avatar.url }}" alt="Аватар" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                            {% else %}
+                                <img src="{% static 'images/default_avatar.png' %}" alt="Аватар по умолчанию" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <h4 class="mb-3">{{ user_object.username }}</h4>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Email:</strong> {{ user_object.email }}</li>
+                                {% if profile.birth_date %}
+                                    <li class="list-group-item"><strong>Дата рождения:</strong> {{ profile.birth_date|date:"d M Y" }}</li>
+                                {% endif %}
+                                {% if profile.telegram_id %}
+                                    <li class="list-group-item"><strong>Telegram ID:</strong> {{ profile.telegram_id }}</li>
+                                {% endif %}
+                                {% if profile.github_id %}
+                                    <li class="list-group-item"><strong>GitHub ID:</strong> {{ profile.github_id }}</li>
+                                {% endif %}
+                                <li class="list-group-item"><strong>Дата регистрации:</strong> {{ user_object.date_joined|date:"d M Y H:i" }}</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {% if request.user == user_object %} {# Проверяем, что это профиль текущего пользователя #}
+                    <div class="d-grid gap-2 mt-4">
+                        <a href="{% url 'profile_edit' %}" class="btn btn-primary btn-lg">Редактировать профиль</a>
+                        <a href="{% url 'password_change' %}" class="btn btn-secondary btn-lg">Сменить пароль</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

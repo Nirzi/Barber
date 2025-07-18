@@ -1,65 +1,58 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm"> {# Added shadow-sm for subtle lift #}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="{% url 'landing' %}">Барбершоп Стальная Борода</a> {# Added fw-bold #}
+        <a class="navbar-brand fw-bold" href="{% url 'landing' %}">Барбершоп Стальная Борода</a>
         <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> {# Added ARIA attributes #}
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0"> {# Added margin-bottom for small screens #}
-                {# Conditional items for staff #}
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% if user.is_staff %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'orders_list' %}">Запись (Admin)</a> {# Clarified for admin #}
+                        <a class="nav-link" href="{% url 'orders_list' %}">Запись (Admin)</a>
                     </li>
                 {% endif %}
 
                 {# Main navigation links #}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'landing' %}#about">О нас</a> {# Link directly to landing then hash #}
+                    <a class="nav-link" href="{% url 'landing' %}#about">О нас</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'landing' %}#masters">Мастера</a> {# Link directly to landing then hash #}
+                    <a class="nav-link" href="{% url 'landing' %}#masters">Мастера</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'landing' %}#reviews">Отзывы</a> {# Link directly to landing then hash #}
+                    <a class="nav-link" href="{% url 'landing' %}#reviews">Отзывы</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'services_list' %}">Услуги</a> {# Changed to a proper URL for a list page #}
+                    <a class="nav-link" href="{% url 'landing' %}#services">Услуги</a>
                 </li>
 
-                {# Conditional items for staff #}
                 {% if user.is_staff %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'service_create' %}">Добавить услугу (Admin)</a> {# Clarified for admin #}
+                        <a class="nav-link" href="{% url 'service_create' %}">Добавить услугу (Admin)</a>
                     </li>
                 {% endif %}
-                {# ...любыe другие пункты вашего меню#}
             </ul>
 
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0"> {# Added margin-bottom for small screens #}
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 {% if user.is_authenticated %}
-                    {# Display username for authenticated users #}
-                    <li class="nav-item d-flex align-items-center me-3"> {# d-flex and align-items-center for vertical alignment #}
+                    <li class="nav-item d-flex align-items-center me-3">
                         <span class="navbar-text text-white-50">Привет, {{ user.username }}!</span>
                     </li>
-                    {# Logout button #}
                     <li class="nav-item">
                         <form method="post" action="{% url 'logout' %}" class="d-inline">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-light">Выйти</button> {# Styled as a button #}
+                            <button type="submit" class="btn btn-outline-light">Выйти</button>
                         </form>
                     </li>
                 {% else %}
-                    {# Login link #}
-                    <li class="nav-item me-2"> {# Added margin to separate buttons #}
-                        <a class="btn btn-outline-light" href="{% url 'login' %}">Войти</a> {# Styled as a button #}
+                    <li class="nav-item me-2">
+                        <a class="btn btn-outline-light" href="{% url 'login' %}">Войти</a>
                     </li>
-                    {# Registration link #}
                     <li class="nav-item">
-                        <a class="btn btn-primary" href="{% url 'register' %}">Регистрация</a> {# <--- CHANGED FROM 'signup' TO 'register' #}
+                        <a class="btn btn-primary" href="{% url 'register' %}">Регистрация</a>
                     </li>
                 {% endif %}
             </ul>
